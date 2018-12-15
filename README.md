@@ -11,7 +11,7 @@ An alternative UI for executing Postman test collections.
 * No need to reimport test collections into the Postman application as they change. Collection files are executed directly.
 
 ### Installation Instructions?
-* Install Node.js
+#### Install Node.js
 
 Windows:
 > https://nodejs.org/en/#download
@@ -25,19 +25,19 @@ or
 Debian-based Linux Distributions:
 > sudo apt-get install nodejs
 
-* Install newman
+#### Install newman
 > npm install -g newman
 
-* Install newman html reporter
+#### Install newman html reporter
 > npm install -g newman-reporter-html
 
-* Install Java and JavaFX (Version 8 or newer)
+#### Install Java and JavaFX (Version 8 or newer)
 > https://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 or, on Debian-based Linux Distributions: 
 > sudo apt-get install default-jdk
 
-* Download the application
+#### Download the application
 
 ### How to use?
 * Select the folder containing your Postman test collection json files by going to Preferences > Set Postman Test Collection Directory
