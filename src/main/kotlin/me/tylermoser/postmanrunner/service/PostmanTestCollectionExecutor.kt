@@ -24,7 +24,9 @@ class PostmanTestCollectionExecutor: Component(), ScopedInstance {
         val result = commandExecutor.executeCommand(
                 logFolderPath = "newman",
                 logFilePrefix = test.fileName,
-                commandToExecute = if (SystemUtils.IS_OS_WINDOWS) "powershell" else "bash",
+                // On Windows the command should read "powershell newman args".
+                // Newman can be executed directly on other platforms.
+                commandToExecute = if (SystemUtils.IS_OS_WINDOWS) "powershell" else "newman",
                 commandArguments = getArguments(test))
         test.status = if (result) PostmanTestStatus.PASS else PostmanTestStatus.FAIL
     }
@@ -34,7 +36,7 @@ class PostmanTestCollectionExecutor: Component(), ScopedInstance {
      */
     private fun getArguments(test: PostmanTest): List<String> {
         val arguments = mutableListOf<String>()
-        arguments.add("newman")
+        if (SystemUtils.IS_OS_WINDOWS) arguments.add("newman")
         arguments.add("run")
         if (persistence.isPostmanEnvironmentFileSelected()) {
             arguments.add("--environment")
