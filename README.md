@@ -1,4 +1,4 @@
-# Postman Test Collection Runner Utility
+# Postman Test Collection Runner
 ### What is it?
 An alternative UI for executing Postman test collections.
 
@@ -8,15 +8,17 @@ An alternative UI for executing Postman test collections.
 * Quickly and easily view results of test executions
 * Faster and more responsive UI than the Postman application when executing lots of test collections
 * No need to manage newman commands
-* No need to reimport test collections as they change. The collections are executed using the collection files directly.
+* No need to reimport test collections into the Postman application as they change. Collection files are executed directly.
 
 ### Installation Instructions?
 * Install Node.js
+
 Windows:
 > https://nodejs.org/en/#download
 
 Mac OSX:
 > https://nodejs.org/en/download/
+
 or
 > brew install node
 
@@ -35,7 +37,7 @@ Debian-based Linux Distributions:
 or, on Debian-based Linux Distributions: 
 > sudo apt-get install default-jdk
 
-###### Download the application
+* Download the application
 
 ### How to use?
 * Select the folder containing your Postman test collection json files by going to Preferences > Set Postman Test Collection Directory
