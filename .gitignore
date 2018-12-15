@@ -48,3 +48,7 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# Explicitly added for this project - Not machine generated
+/conf/
+/newman/
