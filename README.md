@@ -23,8 +23,7 @@ or
 > brew install node
 
 Debian-based Linux Distributions:
-> sudo apt-get install nodejs
-
+> sudo apt-get install nodejs<br>
 > sudo apt install npm
 
 #### Install newman
@@ -49,10 +48,8 @@ Any warnings about requiring a peer of newman@4 during this step can be ignored.
 > https://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 or, on Debian-based Linux Distributions: 
-> sudo add-apt-repository ppa:webupd8team/java
-
-> sudo apt-get update
-
+> sudo add-apt-repository ppa:webupd8team/java<br>
+> sudo apt-get update<br>
 > sudo apt-get install oracle-java8-installer
 
 #### Download the application
