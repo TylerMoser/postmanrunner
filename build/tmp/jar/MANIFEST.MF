@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Class-Path: tornadofx-1.7.17.jar kotlin-stdlib-jdk8-1.2.71.jar commons
+ -lang3-3.6.jar gson-2.8.5.jar kotlinx-coroutines-android-0.24.0.jar k
+ otlin-reflect-1.2.60.jar kotlinx-coroutines-core-0.24.0.jar kotlin-st
+ dlib-jdk7-1.2.71.jar kotlin-stdlib-1.2.71.jar javax.json-1.1.2.jar ja
+ vax.json-api-1.1.2.jar kotlinx-coroutines-core-common-0.24.0.jar atom
+ icfu-common-0.11.0.jar kotlin-stdlib-common-1.2.71.jar annotations-13
+ .0.jar
+Main-Class: me.tylermoser.postmanrunner.AppMain
+
