@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: tornadofx-1.7.17.jar kotlin-stdlib-jdk8-1.2.71.jar commons-lang3-3.6.jar kotlin-reflect-1.2.60.jar
+ kotlin-stdlib-jdk7-1.2.71.jar kotlin-stdlib-1.2.71.jar javax.json-1.1.2.jar javax.json-api-1.1.2.jar
+ kotlin-stdlib-common-1.2.71.jar annotations-13.0.jar gson-2.8.5.jar
+Main-Class: me.tylermoser.postmanrunner.AppMain
+
