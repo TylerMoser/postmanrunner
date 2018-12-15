@@ -38,6 +38,10 @@ or, on Debian-based Linux Distributions:
 > sudo apt-get install default-jdk
 
 #### Download the application
+Download the postmanrunner.jar file in build/libs/ from this repository.
+Run the Jar file.
+
+> Note: This application saves user settings and test collection execution results in the folder where this Jar is located. You may want to place this jar in its own directory for that reason.
 
 ### How to use?
 * Select the folder containing your Postman test collection json files by going to Preferences > Set Postman Test Collection Directory
