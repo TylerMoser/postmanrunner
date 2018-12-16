@@ -56,7 +56,7 @@ or on Debian-based Linux Distributions:
 * Download the "distributable" folder from this repository.
 
 Windows:
-* Execute the postmanrunner.jar file in the distributable folder
+* Execute the postmanrunner.bat file in the distributable folder
 
 Unix-based systems:
 * Execute the postmanrunner.sh file in the distributable folder
