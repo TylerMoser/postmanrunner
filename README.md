@@ -47,7 +47,7 @@ Any warnings about requiring a peer of newman@4 during this step can be ignored.
 #### Install Oracle Java and JavaFX (Version 8 or newer)
 > https://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-or, on Debian-based Linux Distributions: 
+or on Debian-based Linux Distributions:
 > sudo add-apt-repository ppa:webupd8team/java<br>
 > sudo apt-get update<br>
 > sudo apt-get install oracle-java8-installer
@@ -56,10 +56,10 @@ or, on Debian-based Linux Distributions:
 * Download the "distributable" folder from this repository.
 
 Windows:
-* Execute the postmanrunner.jar file
+* Execute the postmanrunner.jar file in the distributable folder
 
 Unix-based systems:
-* Execute the postmanrunner.sh file
+* Execute the postmanrunner.sh file in the distributable folder
 
 ### How to use?
 * Select the folder containing your Postman test collection json files by going to Preferences > Set Postman Test Collection Directory
