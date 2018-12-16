@@ -50,6 +50,6 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # Explicitly added for this project - Not machine generated
-conf
-newman
-build
+/conf/
+/newman/
+/build/
