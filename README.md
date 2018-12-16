@@ -53,11 +53,13 @@ or, on Debian-based Linux Distributions:
 > sudo apt-get install oracle-java8-installer
 
 #### Download the application
-* Download the postmanrunner.jar file in build/libs/ from this repository.
-If on a Unix-based system, you may have to give executable permissions to this jar.
-* Run the Jar file.
+* Download the "distributable" folder from this repository.
 
-> Note: This application saves user settings and test collection execution results in the folder where the Jar is located. You may want to place the jar in its own directory for that reason.
+Windows:
+* Execute the postmanrunner.jar file
+
+Unix-based systems:
+* Execute the postmanrunner.sh file
 
 ### How to use?
 * Select the folder containing your Postman test collection json files by going to Preferences > Set Postman Test Collection Directory
