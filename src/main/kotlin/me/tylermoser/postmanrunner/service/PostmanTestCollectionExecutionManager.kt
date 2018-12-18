@@ -7,6 +7,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.tylermoser.postmanrunner.model.PostmanTest
+import me.tylermoser.postmanrunner.model.PostmanTestStatus
 import tornadofx.*
 
 /**
@@ -26,6 +27,7 @@ class PostmanTestCollectionExecutionManager: Component(), ScopedInstance {
      * Executes a list of [PostmanTest]s.
      */
     fun executeTestCollections(testCollectionsToExecute: MutableList<PostmanTest>) {
+        resetAllTestCollections(testCollectionsToExecute)
         executeTestCollectionsSequentially(testCollectionsToExecute)
     }
 
@@ -61,6 +63,15 @@ class PostmanTestCollectionExecutionManager: Component(), ScopedInstance {
             }
             jobs.forEach { it.await() }
             Platform.runLater { areTestsExecuting = false }
+        }
+    }
+
+    /**
+     * Resets the status of each test selected to be executed to "test execution not started"
+     */
+    private fun resetAllTestCollections(testCollectionsToExecute: MutableList<PostmanTest>) {
+        for (collection in testCollectionsToExecute) {
+            collection.status = PostmanTestStatus.TEST_EXECUTION_NOT_STARTED
         }
     }
 

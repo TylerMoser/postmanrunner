@@ -40,17 +40,17 @@ class PostmanTestCollectionExecutor: Component(), ScopedInstance {
         arguments.add("run")
         if (persistence.isPostmanEnvironmentFileSelected()) {
             arguments.add("--environment")
-            arguments.add(persistence.getPostmanEnvironmentFile().toString())
+            arguments.add("'${persistence.getPostmanEnvironmentFile()}'")
         }
         arguments.add("--reporters")
         arguments.add("json,html")
         arguments.add("--reporter-json-export")
-        arguments.add("newman" + File.separator + test.fileName + ".json")
+        arguments.add("'newman" + File.separator + test.fileName + ".json'")
         arguments.add("--reporter-html-template")
         arguments.add("templates" + File.separator + "htmlreqres.hbs")
         arguments.add("--reporter-html-export")
-        arguments.add("newman" + File.separator + test.fileName + ".html")
-        arguments.add(test.fullyQualifiedFileName)
+        arguments.add("'newman" + File.separator + test.fileName + ".html'")
+        arguments.add("'${test.fullyQualifiedFileName}'")
         return arguments
     }
 
