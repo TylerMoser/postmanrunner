@@ -1,11 +1,11 @@
 package me.tylermoser.postmanrunner.service
 
+//import javafx.application.Platform
+//import javafx.beans.property.SimpleBooleanProperty
 import javafx.application.Platform
 import javafx.beans.property.SimpleBooleanProperty
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Default
 import me.tylermoser.postmanrunner.model.PostmanTest
 import me.tylermoser.postmanrunner.model.PostmanTestStatus
 import tornadofx.*
@@ -38,11 +38,11 @@ class PostmanTestCollectionExecutionManager: Component(), ScopedInstance {
      */
     private fun executeTestCollectionsSequentially(testCollectionsToExecute: MutableList<PostmanTest>) {
         areTestsExecuting = true
-        launch {
+        GlobalScope.launch {
             for (testCollection in testCollectionsToExecute) {
-                async(CommonPool) {
+                withContext(Default) {
                     collectionExecutor.executeTestCollection(testCollection)
-                }.await()
+                }
             }
             Platform.runLater { areTestsExecuting = false } // Run on JavaFX thread
         }
@@ -51,14 +51,13 @@ class PostmanTestCollectionExecutionManager: Component(), ScopedInstance {
     /**
      * Executes a list of [PostmanTest]s simultaneously
      *
-     * !!!!! UNTESTED !!!!!
      * TODO: Test This!
      */
     private fun executeTestCollectionsConcurrently(testCollectionsToExecute: MutableList<PostmanTest>) {
         areTestsExecuting = true
-        launch {
+        GlobalScope.launch {
             val jobs = arrayListOf<Deferred<Any>>()
-            for (testCollection in testCollectionsToExecute) jobs += async(CommonPool) {
+            for (testCollection in testCollectionsToExecute) jobs += async {
                 collectionExecutor.executeTestCollection(testCollection)
             }
             jobs.forEach { it.await() }

@@ -8,7 +8,8 @@ import javafx.scene.control.SelectionMode
 import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.text.FontWeight
-import me.tylermoser.postmanrunner.controller.MainController
+import me.tylermoser.postmanrunner.controller.FileSystemController
+import me.tylermoser.postmanrunner.controller.TestCollectionController
 import me.tylermoser.postmanrunner.model.PostmanTest
 import me.tylermoser.postmanrunner.model.PostmanTestFile
 import me.tylermoser.postmanrunner.model.PostmanTestStatus
@@ -34,36 +35,37 @@ class MainView : View("Postman Test Runner") {
     private val lastSelectedPostmanTestInTable = PostmanTestItemViewModel()
 
     // The view should only depend on controllers to serve as intermediaries between UI and logic
-    private val mainController: MainController by inject()
+    private val testCollectionController: TestCollectionController by inject()
+    private val fileSystemController: FileSystemController by inject()
 
-    override val root = vbox {
+    override val root = borderpane {
         setPrefSize(700.0, 650.0)
-        menubar {
+        top = menubar {
             menu("File") {
-                item("Refresh").action { mainController.refresh() }
+                item("Refresh").action { testCollectionController.refresh() }
                 separator()
                 item("Exit").action { System.exit(0) }
             }
             menu("Preferences") {
                 item("Set Postman Test Collection Directory").action {
-                    mainController.setPostmanTestCollectionDirectory()
+                    fileSystemController.setPostmanTestCollectionDirectory()
                 }
                 item("Set Postman Environment File").action {
-                    mainController.setPostmanEnvironmentFile()
+                    fileSystemController.setPostmanEnvironmentFile()
                 }
             }
         }
-        splitpane {
-            listview = listview(mainController.postmanTestCollectionsInChosenDirectory) {
+        center = splitpane {
+            listview = listview(testCollectionController.postmanTestCollectionsInChosenDirectory) {
                 selectionModel.selectionMode = SelectionMode.MULTIPLE
                 bindSelected(lastSelectedPostmanTestFileInList)
             }
-            tableview = tableview(mainController.postmanTestCollectionsSelectedForExecution) {
+            tableview = tableview(testCollectionController.postmanTestCollectionsSelectedForExecution) {
                 readonlyColumn("Test Collection Name", PostmanTest::fileName).apply {
-                    sortableProperty().bind(!mainController.areTestCollectionsExecutingProperty)
+                    sortableProperty().bind(!testCollectionController.areTestCollectionsExecutingProperty)
                 }
                 column("Test Collection Execution Status", PostmanTest::statusProperty).apply {
-                    sortableProperty().bind(!mainController.areTestCollectionsExecutingProperty)
+                    sortableProperty().bind(!testCollectionController.areTestCollectionsExecutingProperty)
                 }.cellFormat {
                     text = it.toString() // need to manually set text value when overriding cell formatting
                     this.tableRow?.toggleClass(AppStylesheet.postmanTestPass, it == PostmanTestStatus.PASS)
@@ -71,11 +73,31 @@ class MainView : View("Postman Test Runner") {
                 }
 
                 contextmenu {
-                    item("Open Test Result in Browser").action {
-                        selectedItem?.let { mainController.openHtmlTestResultFileInBrowser(selectedItem!!) }
+                    item("Open Log File Directory in File Browser").action {
+                        fileSystemController.openOutputLogDirectory()
+                    }
+                    item("Open HTML Test Result in Web Browser").action {
+                        val selectedTests = selectionModel.selectedItems.filter { test -> test != null }
+                        fileSystemController.openHtmlTestResultFilesInBrowser(selectedTests)
+                    }
+                    item("Open JSON Test Result in Text Editor").action {
+                        val selectedTests = selectionModel.selectedItems.filter { test -> test != null }
+                        fileSystemController.openJsonTestResultsInTextEditor(selectedTests)
+                    }
+                    item("Open Error Stream Log in Text Editor").action {
+                        val selectedTests = selectionModel.selectedItems.filter { test -> test != null }
+                        fileSystemController.openErrorStreamLogsInTextEditor(selectedTests)
+                    }
+                    item("Open Input Stream Log in Text Editor").action {
+                        val selectedTests = selectionModel.selectedItems.filter { test -> test != null }
+                        fileSystemController.openInputStreamLogsInTextEditor(selectedTests)
+                    }
+                    item("Open Output Stream Log in Text Editor").action {
+                        val selectedTests = selectionModel.selectedItems.filter { test -> test != null }
+                        fileSystemController.openOutputStreamLogsInTextEditor(selectedTests)
                     }
                 }
-                onUserSelect(/* double click */2) { mainController.openHtmlTestResultFileInBrowser(it) }
+                onUserSelect(/* double click */2) { fileSystemController.openHtmlTestResultFileInBrowser(it) }
                 columnResizePolicy = SmartResize.POLICY
                 vgrow = Priority.ALWAYS
                 selectionModel.selectionMode = SelectionMode.MULTIPLE
@@ -85,45 +107,47 @@ class MainView : View("Postman Test Runner") {
             orientation = Orientation.VERTICAL
             setDividerPositions(0.5)
         }
-        borderpane {
-            left {
-                button("Add Selected Tests To Execution List") {
-                    disableProperty().bind(Bindings.or(
-                            lastSelectedPostmanTestFileInList.empty,
-                            mainController.areTestCollectionsExecutingProperty
-                    ))
-                    prefWidth = 320.0
-                    action {
-                        val selectedItemsInListView = listview.selectionModel.selectedItems
-                        mainController.addTestsToExecutionList(selectedItemsInListView)
+        bottom = vbox {
+            borderpane {
+                left {
+                    button("Add Selected Tests To Execution List") {
+                        disableProperty().bind(Bindings.or(
+                                lastSelectedPostmanTestFileInList.empty,
+                                testCollectionController.areTestCollectionsExecutingProperty
+                        ))
+                        prefWidth = 320.0
+                        action {
+                            val selectedItemsInListView = listview.selectionModel.selectedItems
+                            testCollectionController.addTestsToExecutionList(selectedItemsInListView)
+                        }
+                    }
+                }
+                right {
+                    button("Remove Selected Tests From Execution List") {
+                        disableProperty().bind(Bindings.or(
+                                lastSelectedPostmanTestInTable.empty,
+                                testCollectionController.areTestCollectionsExecutingProperty
+                        ))
+                        prefWidth = 320.0
+                        action {
+                            val selectedItemsInTableView = tableview.selectionModel.selectedItems
+                            testCollectionController.removeTestsFromExecutionList(selectedItemsInTableView)
+                            tableview.refresh()
+                        }
                     }
                 }
             }
-            right {
-                button("Remove Selected Tests From Execution List") {
+            hbox {
+                alignment = Pos.CENTER
+                paddingAll = 15.0
+                button("Execute Tests") {
                     disableProperty().bind(Bindings.or(
-                            lastSelectedPostmanTestInTable.empty,
-                            mainController.areTestCollectionsExecutingProperty
+                            testCollectionController.postmanTestCollectionsSelectedForExecution.sizeProperty.eq(0),
+                            testCollectionController.areTestCollectionsExecutingProperty
                     ))
-                    prefWidth = 320.0
-                    action {
-                        val selectedItemsInTableView = tableview.selectionModel.selectedItems
-                        mainController.removeTestsFromExecutionList(selectedItemsInTableView)
-                        tableview.refresh()
-                    }
+                    action { testCollectionController.executeTests() }
+                    style { fontWeight = FontWeight.BOLD }
                 }
-            }
-        }
-        hbox {
-            alignment = Pos.CENTER
-            paddingAll = 15.0
-            button("Execute Tests") {
-                disableProperty().bind(Bindings.or(
-                        mainController.postmanTestCollectionsSelectedForExecution.sizeProperty.eq(0),
-                        mainController.areTestCollectionsExecutingProperty
-                ))
-                action { mainController.executeTests() }
-                style { fontWeight = FontWeight.BOLD }
             }
         }
     }
